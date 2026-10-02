@@ -454,12 +454,12 @@ class MainActivity : ComponentActivity() {
         ballWidthPx = ((box.width() + box.height()) / 2f).coerceAtLeast(1f)
         feedbackOverlay.setBallPoint(centerX * feedbackOverlay.width, centerY * feedbackOverlay.height)
 
+        val now = SystemClock.elapsedRealtime()
         if (exercise == "شوتینگ") {
             processShotBall(centerX, centerY, now)
             previousBallY = centerY
             return
         }
-        val now = SystemClock.elapsedRealtime()
 
         val nearHand = latestWristPositions.any { wrist ->
             val dx = wrist.first - centerX
