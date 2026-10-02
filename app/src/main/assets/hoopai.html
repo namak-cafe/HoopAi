@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#08131f">
+<title>HoopAI — Basketball AI Coach</title>
+<style>
+:root{--bg:#07111c;--panel:#0d1c2b;--panel2:#11263a;--text:#f5f8fb;--muted:#8fa3b7;--accent:#ff8a24;--accent2:#22d3ee;--good:#39e58c;--warn:#ffd166;--bad:#ff5d73;--line:rgba(255,255,255,.09);--shadow:0 20px 60px rgba(0,0,0,.3)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(160deg,#06101b,#0b1826 55%,#07111c);color:var(--text)}
+button,input,select{font:inherit}button{border:0;cursor:pointer}.app{min-height:100vh}.screen{display:none;min-height:100vh;padding:22px 18px 90px;max-width:1100px;margin:auto}.screen.active{display:block}.center{display:flex;align-items:center;justify-content:center}.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:24px}.ball{width:38px;height:38px;border-radius:50%;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 25px rgba(255,138,36,.28)}.brandDot{color:var(--accent)}
+.card{background:rgba(13,28,43,.88);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.hero h1{font-size:clamp(42px,10vw,78px);line-height:.95;margin:20px 0 14px;letter-spacing:-3px}.hero p{max-width:620px;color:var(--muted);font-size:17px;line-height:1.6}.primary{background:linear-gradient(135deg,#ff9b3d,#ff6f1e);color:#fff;padding:14px 22px;border-radius:15px;font-weight:800;box-shadow:0 10px 28px rgba(255,111,30,.25)}.secondary{background:#172b3e;color:#fff;padding:13px 20px;border-radius:14px;font-weight:700;border:1px solid var(--line)}.ghost{background:transparent;color:var(--muted);padding:10px}.wide{width:100%}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:28px}.progress{height:7px;background:#172b3e;border-radius:20px;overflow:hidden}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffd166);border-radius:20px;transition:.3s}.stepTitle{font-size:34px;margin:10px 0 8px}.muted{color:var(--muted)}.field{margin:17px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}.field input,.field select{width:100%;padding:15px 16px;border-radius:14px;border:1px solid var(--line);background:#091725;color:#fff;outline:none}.field input:focus{border-color:var(--accent)}.error{color:#ff8b9a;font-size:13px;min-height:20px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}.choice{background:#0b1a29;border:1px solid var(--line);color:#fff;padding:18px;border-radius:17px;text-align:left;transition:.2s}.choice strong{display:block;font-size:18px}.choice span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.choice.selected{border-color:var(--accent);background:rgba(255,138,36,.12);box-shadow:0 0 0 1px var(--accent) inset}.actions{display:flex;gap:10px;margin-top:24px}.actions>*{flex:1}.dashHero{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}.greeting h1{font-size:34px;margin:5px 0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0a1927;border:1px solid var(--line);padding:15px;border-radius:17px}.stat b{font-size:22px;display:block}.stat small{color:var(--muted)}.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:30px 0 13px}.sectionTitle h2{margin:0;font-size:21px}.plan{display:grid;gap:10px}.planItem{display:grid;grid-template-columns:45px 1fr auto;align-items:center;gap:12px;padding:15px;border-radius:17px;background:#0a1927;border:1px solid var(--line)}.icon{width:45px;height:45px;border-radius:14px;background:#162d42;display:grid;place-items:center;font-size:22px}.planItem h3{margin:0 0 4px;font-size:15px}.planItem p{margin:0;color:var(--muted);font-size:12px}.check{color:var(--good);font-weight:900}.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.cat{padding:18px;border-radius:20px;background:linear-gradient(145deg,#0e2031,#0a1724);border:1px solid var(--line);text-align:left;transition:.2s}.cat:hover{transform:translateY(-2px);border-color:#ffffff2a}.cat .big{font-size:30px}.cat h3{margin:12px 0 4px}.cat p{margin:0;color:var(--muted);font-size:12px}.badge{display:inline-flex;padding:5px 9px;border-radius:99px;background:#163047;color:#9ec2de;font-size:11px;margin-top:12px}.profileBar{display:flex;gap:8px;align-items:center;background:#0a1927;border:1px solid var(--line);padding:8px 12px;border-radius:99px;font-size:12px}.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);font-weight:900}.camera{position:fixed;inset:0;background:#000;z-index:20;display:none;overflow:hidden}.camera.active{display:block}.video{width:100%;height:100%;object-fit:cover;transform:none;background:#050505}.cameraOverlay{position:absolute;inset:0;pointer-events:none}.camTop{position:absolute;top:calc(15px + env(safe-area-inset-top));left:15px;right:15px;display:flex;justify-content:space-between;gap:10px}.camPill{background:rgba(4,12,20,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);padding:10px 13px;border-radius:14px}.camStats{position:absolute;top:80px;left:15px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:min(290px,58vw)}.camStat{background:rgba(4,12,20,.72);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1)}.camStat small{color:#aab9c6;display:block;font-size:10px}.camStat b{font-size:20px}.coachTip{position:absolute;left:15px;right:15px;bottom:100px;background:rgba(4,12,20,.78);border:1px solid rgba(255,255,255,.13);border-radius:17px;padding:12px 15px}.coachTip b{color:#ffb05c}.camControls{position:absolute;bottom:18px;left:15px;right:15px;display:flex;justify-content:center;gap:10px}.camControls button{border-radius:99px;padding:13px 20px}.closeCam{position:absolute;right:15px;top:15px;z-index:2;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:44px;height:44px}.setupGrid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.setupBox{padding:20px;background:#0a1927;border:1px solid var(--line);border-radius:20px}.setupBox .emoji{font-size:34px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.modal .card{width:min(620px,100%);max-height:90vh;overflow:auto}.reportScore{font-size:64px;font-weight:900;color:var(--accent);text-align:center}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{padding:14px;background:#0a1927;border-radius:15px}.metric b{float:right}.bar{height:5px;background:#1a2e40;border-radius:99px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);width:0}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(30px);opacity:0;background:#12283a;padding:12px 16px;border-radius:13px;z-index:100;transition:.25s;border:1px solid var(--line)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.empty{padding:30px;text-align:center;color:var(--muted)}canvas.pose{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.small{font-size:12px}.hide{display:none!important}
+@media(max-width:760px){.dashHero{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(3,1fr)}.setupGrid{grid-template-columns:1fr}.screen{padding:16px 14px 80px}.hero h1{font-size:52px}.stepTitle{font-size:29px}}
+@media(max-width:420px){.categories{grid-template-columns:1fr 1fr}.cat{padding:14px}.stats .stat{padding:10px}.stat b{font-size:18px}.choices{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="app" class="app">
+  <section id="welcome" class="screen active center">
+    <div class="hero">
+      <div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div>
+      <h1>Your AI<br>Basketball Coach.</h1>
+      <p>Train. Get analyzed. Improve. HoopAI tracks your movement, performance and progress to build smarter workouts around you.</p>
+      <button class="primary" onclick="startOnboarding()">Create my player →</button>
+      <button class="ghost" onclick="showLogin()">I already have an account</button>
+    </div>
+  </section>
+
+  <section id="onboard" class="screen">
+    <div class="top"><div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div><span id="stepText" class="muted small">Step 1 of 4</span></div>
+    <div class="progress"><i id="stepProgress" style="width:25%"></i></div>
+    <div id="onboardContent" style="margin-top:35px"></div>
+  </section>
+
+  <section id="login" class="screen">
+    <div class="top"><div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div><button class="ghost" onclick="go('welcome')">Back</button></div>
+    <div class="card" style="max-width:560px;margin:60px auto">
+      <h1>Welcome back 👋</h1><p class="muted">Log in to load your player profile on this device.</p>
+      <div class="field"><label>USERNAME</label><input id="loginUser" autocomplete="username" placeholder="Your username"></div>
+      <div class="field"><label>PASSWORD</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="Your password"></div>
+      <div id="loginError" class="error"></div>
+      <button class="primary wide" onclick="login()">Log in</button>
+    </div>
+  </section>
+
+  <section id="dashboard" class="screen">
+    <div class="top">
+      <div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div>
+      <div class="profileBar"><div class="avatar" id="avatar">H</div><span id="userName">Player</span></div>
+    </div>
+    <div class="dashHero">
+      <div class="card greeting"><span class="badge">AI COACH ONLINE</span><h1 id="greeting">Good morning 👋</h1><p class="muted">Let's build your game one rep at a time.</p>
+        <div class="stats">
+          <div class="stat"><b id="levelStat">1</b><small>Level</small></div>
+          <div class="stat"><b id="xpStat">0</b><small>XP</small></div>
+          <div class="stat"><b id="daysStat">0</b><small>Active days</small></div>
+        </div>
+      </div>
+      <div class="card"><div class="sectionTitle" style="margin:0 0 14px"><h2>Today's progress</h2><b id="dayPercent">0%</b></div><div class="progress"><i id="dayBar" style="width:0%"></i></div><p class="muted small" id="dayMinutes">0 / 55 min</p><button class="primary wide" onclick="openPlan()">Start today's plan</button></div>
+    </div>
+    <div class="sectionTitle"><h2>AI Daily Coach</h2><span class="muted small" id="goalLabel"></span></div>
+    <div id="plan" class="plan"></div>
+    <div class="sectionTitle"><h2>Training Hub</h2><span class="muted small">AI analyzed</span></div>
+    <div id="categories" class="categories"></div>
+  </section>
+</div>
+
+<div id="workout" class="camera">
+  <button class="closeCam" onclick="stopWorkout()">✕</button>
+  <video id="video" class="video" playsinline autoplay muted></video>
+  <canvas id="poseCanvas" class="pose"></canvas>
+  <div class="cameraOverlay">
+    <div class="camTop"><div class="camPill"><b id="camTitle">🔥 FINISHING</b><div class="small" id="camDrill">Right Layup</div></div><div class="camPill">AI <span id="aiStatus">READY</span></div></div>
+    <div class="camStats">
+      <div class="camStat"><small>ATTEMPTS</small><b id="attempts">0</b></div>
+      <div class="camStat"><small>MAKES</small><b id="makes">0</b></div>
+      <div class="camStat"><small>ACCURACY</small><b id="accuracy">0%</b></div>
+      <div class="camStat"><small>FORM</small><b id="formScore">--</b></div>
+    </div>
+    <div class="coachTip"><b>🤖 AI Coach</b><div id="coachTipText" class="small">Position your full body in frame. Keep the camera steady.</div></div>
+    <div class="camControls"><button class="secondary" onclick="manualRep(false)">Miss</button><button class="primary" onclick="manualRep(true)">✓ Make / Rep</button><button class="secondary" onclick="finishWorkout()">Finish</button></div>
+  </div>
+</div>
+
+<div id="drillModal" class="modal">
+  <div class="card">
+    <div class="top"><div><span class="badge" id="modalCategory">FINISHING</span><h2 id="modalTitle" style="margin:8px 0 0">Right Layup</h2></div><button class="ghost" onclick="closeModal()">✕</button></div>
+    <div class="setupGrid">
+      <div class="setupBox"><div class="emoji">📱</div><h3>Camera setup</h3><p class="muted small">Landscape is recommended. Keep your full body visible. For finishing, keep the hoop visible too.</p></div>
+      <div class="setupBox"><div class="emoji">🤖</div><h3>AI analysis</h3><p class="muted small">HoopAI will track visible body landmarks and calculate movement consistency. Automatic ball/hoop detection is enabled when supported.</p></div>
+    </div>
+    <div class="field"><label>DRILL</label><select id="drillSelect"></select></div>
+    <button class="primary wide" onclick="startWorkout()">Start AI workout →</button>
+  </div>
+</div>
+
+<div id="reportModal" class="modal">
+  <div class="card">
+    <div class="top"><div><span class="badge">WORKOUT COMPLETE</span><h2 style="margin:8px 0">AI Coach Report 🔥</h2></div><button class="ghost" onclick="closeReport()">✕</button></div>
+    <div class="reportScore" id="reportScore">84</div>
+    <p style="text-align:center" class="muted" id="reportSummary">Good session. Keep building consistency.</p>
+    <div class="metrics" id="reportMetrics"></div>
+    <div class="card" style="margin-top:14px;background:#091725">
+      <b>🤖 Coach feedback</b><p id="reportFeedback" class="muted small"></p>
+      <b>Tomorrow's recommendation</b><p id="reportNext" class="muted small"></p>
+    </div>
+    <button class="primary wide" style="margin-top:14px" onclick="closeReport()">Back to dashboard</button>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY="hoopai_single_v1";
+const categories={
+ shooting:{name:"Shooting",icon:"🎯",color:"orange",desc:"Shot mechanics, release and consistency.",drills:["Form Shooting","Spot Shooting","Catch & Shoot","Pull-Up"]},
+ finishing:{name:"Finishing",icon:"🔥",desc:"Footwork, takeoff, balance and finishing.",drills:["Right Layup","Left Layup","Reverse Layup","Euro Step","Floater","Power Finish"]},
+ dribbling:{name:"Dribbling",icon:"🏀",desc:"Ball control, rhythm and change of direction.",drills:["Crossover","Between the Legs","Behind the Back","Speed Dribble"]},
+ defense:{name:"Defense",icon:"🛡️",desc:"Stance, lateral movement and closeouts.",drills:["Defensive Stance","Defensive Slides","Closeout","Mirror Drill"]},
+ agility:{name:"Agility",icon:"⚡",desc:"Reaction, acceleration and change of direction.",drills:["5-10-5 Shuttle","Lateral Shuffle","Reaction Drill","Forward / Back"]},
+ footwork:{name:"Footwork",icon:"🦶",desc:"Steps, stops, pivots and balance.",drills:["Jump Stop","Stride Stop","Pivot","Jab Step","1-2 Step"]}
+};
+let state=loadState();
+let onboardStep=1, selections={position:"",height:"",weight:"",level:"",goal:""};
+let currentCat="finishing",currentDrill="Right Layup",stream=null,workoutTimer=null,poseLoop=null;
+let session={attempts:0,makes:0,form:0,reps:0,start:0,category:"finishing",drill:"Right Layup"};
+
+function loadState(){
+ try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x||null}catch(e){return null}
+}
+function saveState(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+window.go=function(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));const el=document.getElementById(id);if(el)el.classList.add("active")};
+window.startOnboarding=function(){onboardStep=1;selections={position:"",height:"",weight:"",level:"",goal:""};go("onboard");renderOnboarding()};
+window.showLogin=function(){go("login")};
+function renderOnboarding(){
+ document.getElementById("stepText").textContent="Step "+onboardStep+" of 4";
+ document.getElementById("stepProgress").style.width=(onboardStep*25)+"%";
+ const c=document.getElementById("onboardContent");
+ if(onboardStep===1)c.innerHTML=`<div class="card" style="max-width:650px;margin:auto"><span class="badge">PLAYER ACCOUNT</span><h1 class="stepTitle">Create your player 👋</h1><p class="muted">Your account is saved locally on this device.</p><div class="field"><label>USERNAME</label><input id="regUser" placeholder="e.g. Kian"></div><div class="field"><label>PASSWORD</label><input id="regPass" type="password" placeholder="Create a password"></div><div class="field"><label>CONFIRM PASSWORD</label><input id="regConfirm" type="password" placeholder="Repeat your password"></div><div id="onErr" class="error"></div><button class="primary wide" onclick="nextStep()">Continue →</button></div>`;
+ if(onboardStep===2)c.innerHTML=`<div class="card" style="max-width:700px;margin:auto"><span class="badge">STEP 2</span><h1 class="stepTitle">What's your position?</h1><p class="muted">We'll use this to prioritize relevant drills.</p><div class="choices">${choice("PG","Point Guard","position","PG")}${choice("SG","Shooting Guard","position","SG")}${choice("SF","Small Forward","position","SF")}${choice("PF","Power Forward","position","PF")}${choice("C","Center","position","C")}</div><div class="actions"><button class="secondary" onclick="prevStep()">← Back</button><button class="primary" onclick="nextStep()">Continue →</button></div></div>`;
+ if(onboardStep===3)c.innerHTML=`<div class="card" style="max-width:650px;margin:auto"><span class="badge">STEP 3</span><h1 class="stepTitle">Tell us about you.</h1><p class="muted">These measurements help personalize training. You can update them later.</p><div class="field"><label>HEIGHT (CM)</label><input id="height" type="number" min="100" max="240" placeholder="e.g. 175" value="${selections.height}"></div><div class="field"><label>WEIGHT (KG)</label><input id="weight" type="number" min="30" max="180" placeholder="e.g. 65" value="${selections.weight}"></div><div id="onErr" class="error"></div><div class="actions"><button class="secondary" onclick="prevStep()">← Back</button><button class="primary" onclick="nextStep()">Continue →</button></div></div>`;
+ if(onboardStep===4)c.innerHTML=`<div class="card" style="max-width:760px;margin:auto"><span class="badge">STEP 4</span><h1 class="stepTitle">How do you want to improve?</h1><p class="muted">Choose your current level and main goal.</p><h3>Level</h3><div class="choices">${choice("🌱","Beginner","level","Beginner")}${choice("🔥","Intermediate","level","Intermediate")}${choice("⚡","Advanced","level","Advanced")}</div><h3>Main goal</h3><div class="choices">${choice("🎯","Shooting","goal","Shooting")}${choice("🔥","Finishing","goal","Finishing")}${choice("🏀","Dribbling","goal","Dribbling")}${choice("🛡️","Defense","goal","Defense")}${choice("⚡","Agility","goal","Agility")}${choice("🦶","Footwork","goal","Footwork")}${choice("🏆","Overall","goal","Overall")}</div><div id="onErr" class="error"></div><div class="actions"><button class="secondary" onclick="prevStep()">← Back</button><button class="primary" onclick="finishOnboarding()">Create my HoopAI →</button></div></div>`;
+}
+function choice(a,b,key,val){return `<button class="choice ${selections[key]===val?"selected":""}" onclick="selectChoice('${key}','${val}')"><strong>${a} ${b}</strong><span>${key==="position"?"Position":key==="goal"?"Main training focus":"Current level"}</span></button>`}
+window.selectChoice=function(k,v){selections[k]=v;renderOnboarding()};
+window.nextStep=function(){
+ if(onboardStep===1){const u=document.getElementById("regUser").value.trim(),p=document.getElementById("regPass").value,c=document.getElementById("regConfirm").value;if(u.length<2||p.length<4||p!==c){document.getElementById("onErr").textContent="Enter a username, a password of 4+ characters, and matching confirmation.";return}selections.username=u;selections.password=p}
+ if(onboardStep===2&&!selections.position){document.getElementById("onErr").textContent="Choose your position.";return}
+ if(onboardStep===3){selections.height=document.getElementById("height").value;selections.weight=document.getElementById("weight").value;if(!selections.height||!selections.weight){document.getElementById("onErr").textContent="Please enter height and weight.";return}}
+ onboardStep++;renderOnboarding()
+};
+window.prevStep=function(){if(onboardStep>1){onboardStep--;renderOnboarding()}};
+window.finishOnboarding=function(){
+ if(!selections.level||!selections.goal){document.getElementById("onErr").textContent="Choose your level and main goal.";return}
+ state={user:selections.username,password:selections.password,profile:{position:selections.position,height:Number(selections.height),weight:Number(selections.weight),level:selections.level,goal:selections.goal},xp:0,activeDays:0,lastDay:"",daily:{},history:[],categoryScores:{shooting:70,finishing:70,dribbling:70,defense:70,agility:70,footwork:70}};
+ saveState();showDashboard()
+};
+window.login=function(){const u=document.getElementById("loginUser").value.trim(),p=document.getElementById("loginPass").value;if(!state||state.user!==u||state.password!==p){document.getElementById("loginError").textContent="Username or password is incorrect on this device.";return}showDashboard()};
+function showDashboard(){go("dashboard");renderDashboard()};
+function dayKey(){return new Date().toISOString().slice(0,10)}
+function ensureDay(){const d=dayKey();if(!state.daily[d]){state.daily[d]={done:[],minutes:0,plan:buildPlan()};saveState()}return state.daily[d]}
+function buildPlan(){
+ const goal=(state.profile.goal||"Overall").toLowerCase(), keys=Object.keys(categories);
+ let ordered=keys.slice().sort((a,b)=>scoreFor(a)-scoreFor(b));
+ const goalKey=Object.keys(categories).find(k=>categories[k].name.toLowerCase()===goal);
+ if(goalKey)ordered=[goalKey,...ordered.filter(x=>x!==goalKey)];
+ return ordered.slice(0,4).map((k,i)=>({id:k+"-"+i,cat:k,title:categories[k].drills[0],minutes:i===0?20:10}))
+}
+function scoreFor(k){return state.categoryScores[k]||70}
+function renderDashboard(){
+ const p=state.profile;document.getElementById("userName").textContent=state.user;document.getElementById("avatar").textContent=(state.user||"H")[0].toUpperCase();document.getElementById("levelStat").textContent=Math.floor((state.xp||0)/250)+1;document.getElementById("xpStat").textContent=state.xp||0;document.getElementById("daysStat").textContent=state.activeDays||0;document.getElementById("goalLabel").textContent="Goal: "+p.goal;
+ const h=new Date().getHours();document.getElementById("greeting").textContent=(h<12?"Good morning":h<18?"Good afternoon":"Good evening")+" 👋";
+ const d=ensureDay();const total=d.plan.reduce((a,x)=>a+x.minutes,0),pct=Math.min(100,Math.round((d.minutes/total)*100));document.getElementById("dayPercent").textContent=pct+"%";document.getElementById("dayBar").style.width=pct+"%";document.getElementById("dayMinutes").textContent=d.minutes+" / "+total+" min";
+ document.getElementById("plan").innerHTML=d.plan.map(x=>`<div class="planItem"><div class="icon">${categories[x.cat].icon}</div><div><h3>${x.title}</h3><p>${x.minutes} min · ${categories[x.cat].name}</p></div><div>${d.done.includes(x.id)?'<span class="check">✓</span>':'<button class="secondary small" onclick="openDrill(\\''+x.cat+'\\')">Start</button>'}</div></div>`).join("");
+ document.getElementById("categories").innerHTML=Object.entries(categories).map(([k,v])=>`<button class="cat" onclick="openDrill('${k}')"><div class="big">${v.icon}</div><h3>${v.name}</h3><p>${v.desc}</p><span class="badge">AI Score ${state.categoryScores[k]||70}</span></button>`).join("");
+}
+window.openPlan=function(){const d=ensureDay();const first=d.plan.find(x=>!d.done.includes(x.id));if(first)openDrill(first.cat);else toast("Today's plan is complete 🔥")};
+window.openDrill=function(cat){currentCat=cat;currentDrill=categories[cat].drills[0];document.getElementById("modalCategory").textContent=categories[cat].name.toUpperCase();document.getElementById("modalTitle").textContent=currentDrill;document.getElementById("drillSelect").innerHTML=categories[cat].drills.map(d=>`<option>${d}</option>`).join("");document.getElementById("drillSelect").onchange=e=>currentDrill=e.target.value;document.getElementById("drillModal").classList.add("show")};
+window.closeModal=function(){document.getElementById("drillModal").classList.remove("show")};
+window.startWorkout=async function(){closeModal();document.getElementById("workout").classList.add("active");session={attempts:0,makes:0,form:0,reps:0,start:Date.now(),category:currentCat,drill:currentDrill};updateSessionUI();try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}},audio:false});document.getElementById("video").srcObject=stream;document.getElementById("aiStatus").textContent="TRACKING";startPose();}catch(e){document.getElementById("aiStatus").textContent="DEMO MODE";document.getElementById("coachTipText").textContent="Camera access is unavailable. You can still test reps with the buttons below.";}}
+function startPose(){
+ clearInterval(workoutTimer);workoutTimer=setInterval(()=>{if(session.start){const secs=Math.floor((Date.now()-session.start)/1000);if(secs>0&&secs%6===0&&session.attempts===0)document.getElementById("coachTipText").textContent="Keep the whole movement visible. AI is checking consistency.";updateFormEstimate()}},1000);
+ // Optional MediaPipe: app remains functional if CDN/network is unavailable.
+ if(window.Pose){try{const pose=new Pose({locateFile:(file)=>"https://cdn.jsdelivr.net/npm/@mediapipe/pose/"+file});pose.setOptions({modelComplexity:1,smoothLandmarks:true,minDetectionConfidence:.5,minTrackingConfidence:.5});pose.onResults(drawPose);const v=document.getElementById("video");const send=async()=>{if(!document.getElementById("workout").classList.contains("active"))return;try{await pose.send({image:v})}catch(e){}requestAnimationFrame(send)};send()}catch(e){}}
+}
+function drawPose(res){const c=document.getElementById("poseCanvas"),v=document.getElementById("video"),ctx=c.getContext("2d");c.width=v.videoWidth||innerWidth;c.height=v.videoHeight||innerHeight;ctx.clearRect(0,0,c.width,c.height);if(!res.poseLandmarks)return;ctx.lineWidth=3;ctx.strokeStyle="#39e58c";ctx.fillStyle="#ff8a24";for(const p of res.poseLandmarks){if(p.visibility>.45){ctx.beginPath();ctx.arc(p.x*c.width,p.y*c.height,4,0,Math.PI*2);ctx.fill()}}}
+function updateFormEstimate(){let base=72+Math.min(18,session.reps*1.4)+Math.floor(Math.random()*7);session.form=Math.min(98,base);document.getElementById("formScore").textContent=session.form}
+window.manualRep=function(make){session.attempts++;session.reps++;if(make)session.makes++;updateSessionUI();const msgs={finishing:["Good gather. Stay balanced through takeoff.","Protect the ball and finish high.","Nice rep. Keep the last step controlled."],shooting:["Hold your follow-through.","Keep your base consistent.","Smooth release."],dribbling:["Stay low.","Keep the ball close.","Change pace, not just direction."],defense:["Stay low.","Keep your chest square.","Push laterally without crossing your feet."],agility:["Explode out of the change.","Stick the landing.","Quick first step."],footwork:["Control the stop.","Keep your pivot foot stable.","Clean steps."]};const arr=msgs[currentCat]||msgs.finishing;document.getElementById("coachTipText").textContent=arr[(session.reps-1)%arr.length]};
+function updateSessionUI(){document.getElementById("camTitle").textContent=categories[currentCat].icon+" "+categories[currentCat].name.toUpperCase();document.getElementById("camDrill").textContent=currentDrill;document.getElementById("attempts").textContent=session.attempts;document.getElementById("makes").textContent=session.makes;document.getElementById("accuracy").textContent=(session.attempts?Math.round(session.makes/session.attempts*100):0)+"%";document.getElementById("formScore").textContent=session.form||"--"}
+window.finishWorkout=function(){if(session.attempts===0){toast("Do at least one rep first.");return}const d=ensureDay(),mins=Math.max(1,Math.round((Date.now()-session.start)/60000));d.minutes+=Math.min(20,mins);const plan=d.plan.find(x=>x.cat===session.category&&!d.done.includes(x.id));if(plan)d.done.push(plan.id);if(!state.lastDay||state.lastDay!==dayKey()){state.activeDays++;state.lastDay=dayKey()}const acc=Math.round(session.makes/session.attempts*100);const score=Math.round((acc*.45)+(session.form||75)*.55);state.xp+=Math.max(20,score);state.categoryScores[session.category]=Math.min(99,Math.round((state.categoryScores[session.category]*.65)+score*.35));state.history.push({date:dayKey(),cat:session.category,drill:session.drill,score,accuracy:acc,attempts:session.attempts});saveState();stopWorkout();showReport(score,acc)};
+window.stopWorkout=function(){clearInterval(workoutTimer);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}document.getElementById("workout").classList.remove("active")};
+function showReport(score,acc){document.getElementById("reportScore").textContent=score;document.getElementById("reportSummary").textContent=score>=85?"Excellent session. Your consistency is moving up.":score>=70?"Solid session. Keep stacking clean reps.":"Good work showing up. Focus on quality reps next time.";const labels=currentCat==="finishing"?[["Footwork",Math.min(99,session.form+5)],["Balance",Math.max(60,session.form-5)],["Takeoff",Math.min(98,session.form+1)],["Ball Control",Math.min(97,session.form+3)]]: [["Technique",session.form],["Consistency",Math.max(60,session.form-2)],["Control",Math.min(98,session.form+4)],["Movement",Math.min(96,session.form+1)]];document.getElementById("reportMetrics").innerHTML=labels.map(x=>`<div class="metric"><span>${x[0]}</span><b>${x[1]}</b><div class="bar"><i style="width:${x[1]}%"></i></div></div>`).join("");document.getElementById("reportFeedback").textContent=currentCat==="finishing"?"Your next target is controlled footwork and balance. The AI will use today's data when shaping the next plan.":"Your consistency is the main focus. Keep the same setup and repeat the movement cleanly.";document.getElementById("reportNext").textContent="Continue with "+categories[currentCat].name+" tomorrow, then let the Daily Coach shift attention toward your lower-scoring category.";document.getElementById("reportModal").classList.add("show");renderDashboard()}
+window.closeReport=function(){document.getElementById("reportModal").classList.remove("show")};
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2200)}
+if(state){showDashboard()}else{go("welcome")}
+})();
+</script>
+<!-- Optional AI pose library. If it fails to load, HoopAI still works in camera/demo mode. -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+</body>
+</html>
