@@ -131,6 +131,7 @@ class MainActivity : ComponentActivity() {
             exercise = name
             resetBallTracking()
             mainMenu.visibility = View.GONE
+            categoryMenu.visibility = View.GONE
             cameraUi.visibility = View.VISIBLE
             preview.visibility = View.VISIBLE
             overlay.visibility = View.VISIBLE
@@ -483,6 +484,8 @@ class MainActivity : ComponentActivity() {
                     dribbleSuccess++
                     lastDribbleTime = now
                     runOnUiThread {
+                        feedbackOverlay.showSuccess()
+                        tone?.startTone(ToneGenerator.TONE_PROP_BEEP2, 70)
                         updateMetrics(latestConfidence, latestVisible, lastQuality)
                     }
                 }
