@@ -424,15 +424,9 @@ class MainActivity : ComponentActivity() {
 
             val ballOptions = ObjectDetector.ObjectDetectorOptions.builder()
                 .setBaseOptions(ballBase)
-                .setRunningMode(RunningMode.LIVE_STREAM)
+                .setRunningMode(RunningMode.IMAGE)
                 .setScoreThreshold(0.30f)
                 .setMaxResults(5)
-                .setResultListener { result: ObjectDetectorResult, _ ->
-                    if (exercise == "دریبلینگ" || exercise == "شوتینگ") {
-                        processBall(result)
-                    }
-                }
-                .setErrorListener { }
                 .build()
 
             objectDetector = ObjectDetector.createFromOptions(this, ballOptions)
@@ -586,7 +580,9 @@ class MainActivity : ComponentActivity() {
                         val timestamp = SystemClock.uptimeMillis()
                         landmarker?.detectAsync(mp, timestamp)
                         if (exercise == "دریبلینگ" || exercise == "شوتینگ") {
-                            objectDetector?.detectAsync(mp, timestamp)
+                            objectDetector?.detect(mp)?.let { ballResult ->
+                                processBall(ballResult)
+                            }
                         }
                     }
                 } catch (_: Exception) {
