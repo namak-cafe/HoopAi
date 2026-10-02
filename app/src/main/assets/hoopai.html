@@ -21,8 +21,8 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}.app{min-height:
       <div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div>
       <h1>Your AI<br>Basketball Coach.</h1>
       <p>Train. Get analyzed. Improve. HoopAI tracks your movement, performance and progress to build smarter workouts around you.</p>
-      <button id="createPlayerBtn" type="button" class="primary">Create my player →</button>
-      <button id="loginBtn" type="button" class="ghost">I already have an account</button>
+      <button id="createPlayerBtn" type="button" class="primary" onclick="if(window.startOnboarding)window.startOnboarding();">Create my player →</button>
+      <button id="loginBtn" type="button" class="ghost" onclick="if(window.showLogin)window.showLogin();">I already have an account</button>
     </div>
   </section>
 
