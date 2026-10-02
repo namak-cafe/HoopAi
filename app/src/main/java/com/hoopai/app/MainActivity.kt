@@ -47,11 +47,6 @@ class MainActivity : ComponentActivity() {
             settings.setSupportMultipleWindows(false)
             settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
             webViewClient = object : WebViewClientCompat() {
-                override fun onPageFinished(view: WebView, url: String) {
-                    super.onPageFinished(view, url)
-                    view.evaluateJavascript("(function(){var b=document.getElementById('createPlayerBtn');if(b){b.onclick=function(e){e.preventDefault();if(window.startOnboarding){window.startOnboarding();}};}var l=document.getElementById('loginBtn');if(l){l.onclick=function(e){e.preventDefault();if(window.showLogin){window.showLogin();}};}})();", null)
-                }
-
                 override fun shouldInterceptRequest(
                     view: WebView,
                     request: WebResourceRequest
