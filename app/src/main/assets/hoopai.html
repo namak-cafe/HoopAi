@@ -21,8 +21,8 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}.app{min-height:
       <div class="logo"><div class="ball">🏀</div>Hoop<span class="brandDot">AI</span></div>
       <h1>Your AI<br>Basketball Coach.</h1>
       <p>Train. Get analyzed. Improve. HoopAI tracks your movement, performance and progress to build smarter workouts around you.</p>
-      <button class="primary" onclick="startOnboarding()">Create my player →</button>
-      <button class="ghost" onclick="showLogin()">I already have an account</button>
+      <button id="createPlayerBtn" type="button" class="primary">Create my player →</button>
+      <button id="loginBtn" type="button" class="ghost">I already have an account</button>
     </div>
   </section>
 
@@ -198,5 +198,5 @@ if(state){showDashboard()}else{go("welcome")}
 </script>
 <!-- Optional AI pose library. If it fails to load, HoopAI still works in camera/demo mode. -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-</body>
+<script>document.addEventListener("DOMContentLoaded",function(){var a=document.getElementById("createPlayerBtn");var b=document.getElementById("loginBtn");if(a)a.addEventListener("click",function(e){e.preventDefault();if(typeof window.startOnboarding==="function"){window.startOnboarding();}});if(b)b.addEventListener("click",function(e){e.preventDefault();if(typeof window.showLogin==="function"){window.showLogin();}});});</script>\n</body>
 </html>
