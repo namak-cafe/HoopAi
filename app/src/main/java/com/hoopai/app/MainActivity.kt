@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
         textSize = 13f
         setTextColor(Color.WHITE)
         isAllCaps = false
-        background = gradient(Color.rgb(42, 47, 72), Color.rgb(27, 31, 52), 20f)
+        background = gradient(Color.rgb(42, 47, 72), Color.rgb(27, 31, 52), radius = 20f)
         setPadding(14, 0, 14, 0)
     }
 
@@ -151,7 +151,7 @@ class MainActivity : ComponentActivity() {
         setTypeface(typeface, android.graphics.Typeface.BOLD)
         setTextColor(Color.WHITE)
         isAllCaps = false
-        background = gradient(Color.rgb(255, 145, 35), Color.rgb(236, 74, 72), 22f)
+        background = gradient(Color.rgb(255, 145, 35), Color.rgb(236, 74, 72), radius = 22f)
         elevation = 5f
     }
 
@@ -408,7 +408,7 @@ class MainActivity : ComponentActivity() {
         val hud = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(18, 18, 18, 18)
-            background = gradient(Color.argb(220, 9, 12, 25), Color.argb(120, 9, 12, 25), 0f)
+            background = gradient(Color.argb(220, 9, 12, 25), Color.argb(120, 9, 12, 25), radius = 0f)
         }
         status = tv("در حال آماده‌سازی AI…", 14f, Color.WHITE)
         metrics = tv("اعتماد: --   •   نقاط بدن: --", 13f, Color.rgb(210, 216, 232))
@@ -423,7 +423,7 @@ class MainActivity : ComponentActivity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
             setPadding(12, 10, 12, 18)
-            background = gradient(Color.argb(210, 8, 10, 20), Color.argb(100, 8, 10, 20), 0f)
+            background = gradient(Color.argb(210, 8, 10, 20), Color.argb(100, 8, 10, 20), radius = 0f)
         }
         val back = smallButton("✕  خروج")
         back.setOnClickListener { stopCameraAndBack() }
