@@ -113,8 +113,7 @@ XP + رکوردها" android:textAlignment="center"
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/cameraUi" android:layout_width="match_parent" android:layout_height="match_parent"
-        android:orientation="vertical" android:visibility="gone">
+    <FrameLayout android:id="@+id/cameraUi" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
 
         <LinearLayout android:id="@+id/topPanel" android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_marginStart="18dp" android:layout_marginTop="14dp" android:orientation="vertical"
@@ -131,10 +130,8 @@ XP + رکوردها" android:textAlignment="center"
         <com.hoopai.app.FeedbackOverlayView android:id="@+id/feedbackOverlay"
             android:layout_width="match_parent" android:layout_height="match_parent"
             android:clickable="false" android:focusable="false"/>
-
-        <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
         <LinearLayout android:id="@+id/exerciseBar" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_margin="14dp" android:orientation="horizontal" android:gravity="center" android:padding="9dp"
+            android:layout_gravity="bottom" android:layout_margin="14dp" android:orientation="horizontal" android:gravity="center" android:padding="9dp"
             android:background="@drawable/hoopai_menu_panel" android:elevation="12dp">
             <Button android:id="@+id/shooting" style="@style/HoopExerciseButton" android:layout_width="0dp" android:layout_height="52dp"
                 android:layout_weight="1" android:text="شوتینگ"/>
@@ -149,5 +146,5 @@ XP + رکوردها" android:textAlignment="center"
             <Button android:id="@+id/backMenu" style="@style/HoopExerciseButton" android:layout_width="70dp" android:layout_height="52dp"
                 android:layout_marginStart="8dp" android:text="منو"/>
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>
