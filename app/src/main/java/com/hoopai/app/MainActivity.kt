@@ -74,6 +74,16 @@ class MainActivity : ComponentActivity() {
         metrics = findViewById(R.id.metrics)
         overlay = findViewById(R.id.poseOverlay)
 
+        val mainMenu = findViewById<View>(R.id.mainMenu)
+        val cameraUi = findViewById<View>(R.id.cameraUi)
+        val startExercise = findViewById<TextView>(R.id.startExercise)
+
+        val menuShooting = findViewById<TextView>(R.id.menuShooting)
+        val menuDribbling = findViewById<TextView>(R.id.menuDribbling)
+        val menuDefense = findViewById<TextView>(R.id.menuDefense)
+        val menuFootwork = findViewById<TextView>(R.id.menuFootwork)
+        val menuFinishing = findViewById<TextView>(R.id.menuFinishing)
+
         val shooting = findViewById<Button>(R.id.shooting)
         val dribbling = findViewById<Button>(R.id.dribbling)
         val defense = findViewById<Button>(R.id.defense)
@@ -89,6 +99,35 @@ class MainActivity : ComponentActivity() {
         defense.setOnClickListener { selectExercise("دفاع", defense) }
         finishing.setOnClickListener { selectExercise("فینیشینگ", finishing) }
 
+        fun openExercise(name: String) {
+            exercise = name
+            resetBallTracking()
+            mainMenu.visibility = View.GONE
+            cameraUi.visibility = View.VISIBLE
+            preview.visibility = View.VISIBLE
+            overlay.visibility = View.VISIBLE
+            status.text = name + "  •  AI فعال • آماده تحلیل"
+            if (name == "شوتینگ") shooting.isSelected = true
+            if (name == "دریبلینگ") dribbling.isSelected = true
+            if (name == "دفاع") defense.isSelected = true
+            if (name == "فینیشینگ") finishing.isSelected = true
+            updateMetrics(latestConfidence, latestVisible, lastQuality)
+        }
+
+        menuShooting.setOnClickListener { openExercise("شوتینگ") }
+        menuDribbling.setOnClickListener { openExercise("دریبلینگ") }
+        menuDefense.setOnClickListener { openExercise("دفاع") }
+        menuFootwork.setOnClickListener { openExercise("فوت‌ورک") }
+        menuFinishing.setOnClickListener { openExercise("فینیشینگ") }
+        startExercise.setOnClickListener { openExercise(exercise) }
+
+        findViewById<Button>(R.id.backMenu).setOnClickListener {
+            cameraUi.visibility = View.GONE
+            preview.visibility = View.GONE
+            overlay.visibility = View.GONE
+            mainMenu.visibility = View.VISIBLE
+        }
+
         findViewById<Button>(R.id.switchCamera).setOnClickListener {
             lens = if (lens == CameraSelector.LENS_FACING_BACK) {
                 CameraSelector.LENS_FACING_FRONT
@@ -99,6 +138,11 @@ class MainActivity : ComponentActivity() {
         }
 
         selectExercise("شوتینگ", shooting)
+
+        mainMenu.visibility = View.VISIBLE
+        cameraUi.visibility = View.GONE
+        preview.visibility = View.GONE
+        overlay.visibility = View.GONE
 
         if (!getPreferences(0).getBoolean("profile_done", false)) {
             showProfileWizard()
