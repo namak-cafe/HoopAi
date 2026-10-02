@@ -1,7 +1,7 @@
 package com.hoopai.app
 
 import android.Manifest
-import android.app.Activity
+import androidx.activity.ComponentActivity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -23,7 +23,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 
-class MainActivity : Activity() {
+class MainActivity : ComponentActivity() {
     private lateinit var preview: PreviewView
     private lateinit var status: TextView
     private lateinit var metrics: TextView
