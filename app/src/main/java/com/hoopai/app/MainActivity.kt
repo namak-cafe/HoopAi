@@ -27,7 +27,6 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.sqrt
-import kotlin.math.toDegrees
 
 class MainActivity : ComponentActivity() {
     private lateinit var preview: PreviewView
@@ -203,7 +202,7 @@ class MainActivity : ComponentActivity() {
         val vy = (c.y() - b.y()).toDouble()
         val dot = ux * vx + uy * vy
         val den = sqrt(ux * ux + uy * uy) * sqrt(vx * vx + vy * vy)
-        return if (den == 0.0) 0.0 else toDegrees(acos((dot / den).coerceIn(-1.0, 1.0)))
+        return if (den == 0.0) 0.0 else Math.toDegrees(acos((dot / den).coerceIn(-1.0, 1.0)))
     }
 
     private fun quality(
@@ -297,7 +296,7 @@ class MainActivity : ComponentActivity() {
     private fun processBall(result: ObjectDetectorResult) {
         val detection = result.detections().firstOrNull { d ->
             val category = d.categories().firstOrNull()
-            val label = category?.categoryName()?.orElse("")?.lowercase() ?: ""
+            val label = category?.categoryName()?.lowercase() ?: ""
             label == "sports ball" || label == "sportsball" || label == "ball"
         } ?: return
 
