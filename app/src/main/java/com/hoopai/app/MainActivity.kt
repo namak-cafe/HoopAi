@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContentView(webView)
-        webView.loadUrl("https://appassets.androidplatform.net/assets/hoopai.html")
+        webView.loadUrl("https://appassets.androidplatform.net/assets/hoopai.html?v=3")
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
