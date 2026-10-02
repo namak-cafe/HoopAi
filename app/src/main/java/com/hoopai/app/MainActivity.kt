@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
+import java.util.concurrent.Executors
 import android.widget.Button
 import android.widget.TextView
 import androidx.camera.core.CameraSelector
@@ -25,6 +26,7 @@ class MainActivity : Activity() {
     private lateinit var status: TextView
     private var lens = CameraSelector.LENS_FACING_BACK
     private var landmarker: PoseLandmarker? = null
+    private val analysisExecutor = Executors.newSingleThreadExecutor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +85,7 @@ class MainActivity : Activity() {
             val selector = CameraSelector.Builder().requireLensFacing(lens).build()
             val previewUseCase = Preview.Builder().build().also { it.setSurfaceProvider(preview.surfaceProvider) }
             val analysis = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
-            analysis.setAnalyzer(ContextCompat.getMainExecutor(this)) { proxy ->
+            analysis.setAnalyzer(analysisExecutor) { proxy ->
                 try {
                     val image = proxy.image
                     if (image != null) {
@@ -106,6 +108,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         landmarker?.close()
+        analysisExecutor.shutdownNow()
         super.onDestroy()
     }
 }
