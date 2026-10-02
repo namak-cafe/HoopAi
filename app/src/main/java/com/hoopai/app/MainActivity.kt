@@ -24,6 +24,9 @@ import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 class MainActivity : Activity() {
     private lateinit var preview: PreviewView
     private lateinit var status: TextView
+    private lateinit var metrics: TextView
+    private lateinit var overlay: PoseOverlayView
+    private var exercise = "شوتینگ"
     private var lens = CameraSelector.LENS_FACING_BACK
     private var landmarker: PoseLandmarker? = null
     private val analysisExecutor = Executors.newSingleThreadExecutor()
@@ -33,6 +36,12 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
         preview = findViewById(R.id.preview)
         status = findViewById(R.id.status)
+        metrics = findViewById(R.id.metrics)
+        overlay = findViewById(R.id.poseOverlay)
+        findViewById<Button>(R.id.shooting).setOnClickListener { exercise = "شوتینگ"; titleUpdate() }
+        findViewById<Button>(R.id.dribbling).setOnClickListener { exercise = "دریبل"; titleUpdate() }
+        findViewById<Button>(R.id.defense).setOnClickListener { exercise = "دفاع"; titleUpdate() }
+        findViewById<Button>(R.id.finishing).setOnClickListener { exercise = "فینیشینگ"; titleUpdate() }
 
         findViewById<Button>(R.id.switchCamera).setOnClickListener {
             lens = if (lens == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
@@ -55,6 +64,8 @@ class MainActivity : Activity() {
         } else status.text = "دسترسی دوربین لازم است"
     }
 
+    private fun titleUpdate() { status.text = "$exercise • آماده تحلیل" }
+
     private fun setupAI() {
         try {
             val base = BaseOptions.builder().setModelAssetPath("pose_landmarker_lite.task").build()
@@ -66,8 +77,13 @@ class MainActivity : Activity() {
                 .setMinTrackingConfidence(0.5f)
                 .setResultListener { result: PoseLandmarkerResult, _ ->
                     runOnUiThread {
-                        val count = result.landmarks().firstOrNull()?.size ?: 0
-                        status.text = if (count > 0) "AI فعال • بدن شناسایی شد ($count نقاط)" else "بدن در کادر نیست"
+                        val pts = result.landmarks().firstOrNull() ?: emptyList()
+                        val count = pts.size
+                        overlay.setLandmarks(pts)
+                        val visible = pts.count { it.visibility().orElse(0f) > 0.5f }
+                        val confidence = if (count == 0) 0 else ((visible.toFloat()/count)*100).toInt()
+                        status.text = if (count > 0) "$exercise • AI فعال • بدن شناسایی شد" else "$exercise • بدن در کادر نیست"
+                        metrics.text = "اعتماد: $confidence%   نقاط بدن: $visible/$count"
                     }
                 }
                 .setErrorListener { error -> runOnUiThread { status.text = "خطای AI: ${error.message ?: "unknown"}" } }
