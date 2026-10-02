@@ -88,7 +88,7 @@ class FeedbackOverlayView @JvmOverloads constructor(
             canvas.save()
             canvas.translate(width / 2f, height * 0.32f)
             canvas.scale(scale, scale)
-            feedbackPaint.alpha = (255 * alphaValue).toInt()
+            feedbackPaint.alpha = (255f * alphaValue).toInt()
             feedbackPaint.textSize = minOf(width, height) * 0.22f
             canvas.drawText(symbol, 0f, feedbackPaint.textSize * 0.35f, feedbackPaint)
             canvas.restore()
