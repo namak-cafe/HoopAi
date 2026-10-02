@@ -2,6 +2,7 @@ package com.hoopai.app
 
 import android.Manifest
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -31,6 +32,11 @@ class MainActivity : ComponentActivity() {
     private var exercise = "شوتینگ"
     private var reps = 0
     private var lastQuality = -1
+
+    private val cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) { setupAI(); startCamera() } else status.text = "دسترسی دوربین لازم است"
+    }
+
     private var lens = CameraSelector.LENS_FACING_BACK
     private var landmarker: PoseLandmarker? = null
     private val analysisExecutor = Executors.newSingleThreadExecutor()
@@ -57,16 +63,8 @@ class MainActivity : ComponentActivity() {
             setupAI()
             startCamera()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 10)
+            cameraPermission.launch(Manifest.permission.CAMERA)
         }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, results: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, results)
-        if (requestCode == 10 && results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED) {
-            setupAI()
-            startCamera()
-        } else status.text = "دسترسی دوربین لازم است"
     }
 
     private fun titleUpdate() { status.text = "$exercise • آماده تحلیل" }
