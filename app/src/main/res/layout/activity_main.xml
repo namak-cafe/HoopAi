@@ -113,6 +113,81 @@ XP + رکوردها" android:textAlignment="center"
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/categoryMenu"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical" android:paddingStart="22dp" android:paddingEnd="22dp"
+        android:paddingTop="18dp" android:paddingBottom="14dp" android:background="#0B0D12"
+        android:visibility="gone">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+            <Button android:id="@+id/categoryBack" android:layout_width="52dp" android:layout_height="46dp"
+                android:text="‹" android:textSize="24sp" android:textColor="#FFFFFF" android:background="@drawable/menu_chip"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                <TextView android:id="@+id/categoryTitle" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="شوتینگ" android:textColor="#FFFFFF" android:textSize="25sp" android:textStyle="bold"/>
+                <TextView android:id="@+id/categorySubtitle" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="تمرین‌های تخصصی این شاخه" android:textColor="#AEB5C2" android:textSize="13sp"/>
+            </LinearLayout>
+            <TextView android:layout_width="52dp" android:layout_height="46dp" android:gravity="center"
+                android:text="AI" android:textColor="#111111" android:textStyle="bold" android:background="@drawable/start_button"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+            android:layout_marginTop="18dp" android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+                android:layout_marginBottom="8dp" android:padding="16dp" android:orientation="horizontal"
+                android:gravity="center_vertical" android:background="@drawable/menu_card">
+                <TextView android:layout_width="64dp" android:layout_height="64dp" android:gravity="center"
+                    android:text="🎯" android:textSize="30sp" android:background="@drawable/card_orange"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="14dp" android:orientation="vertical">
+                    <TextView android:id="@+id/exerciseName1" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="فرم شوت" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/exerciseDesc1" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="پا، تعادل، آرنج و رهاسازی" android:textColor="#AEB5C2" android:textSize="12sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp"
+                        android:text="AI ANALYSIS  •  دوربین" android:textColor="#FFB45C" android:textSize="10sp" android:textStyle="bold"/>
+                </LinearLayout>
+                <TextView android:id="@+id/exerciseStart1" android:layout_width="88dp" android:layout_height="42dp" android:gravity="center"
+                    android:text="شروع  ›" android:textColor="#111111" android:textStyle="bold" android:background="@drawable/start_button"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+                android:layout_marginBottom="8dp" android:padding="16dp" android:orientation="horizontal"
+                android:gravity="center_vertical" android:background="@drawable/menu_card">
+                <TextView android:layout_width="64dp" android:layout_height="64dp" android:gravity="center"
+                    android:text="🏀" android:textSize="30sp" android:background="@drawable/card_purple"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="14dp" android:orientation="vertical">
+                    <TextView android:id="@+id/exerciseName2" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="تمرین اصلی" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/exerciseDesc2" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="تکرار واقعی با شمارش هوشمند" android:textColor="#AEB5C2" android:textSize="12sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp"
+                        android:text="AI ANALYSIS  •  شمارش" android:textColor="#A996FF" android:textSize="10sp" android:textStyle="bold"/>
+                </LinearLayout>
+                <TextView android:id="@+id/exerciseStart2" android:layout_width="88dp" android:layout_height="42dp" android:gravity="center"
+                    android:text="شروع  ›" android:textColor="#111111" android:textStyle="bold" android:background="@drawable/start_button"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"
+                android:padding="16dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="@drawable/menu_card">
+                <TextView android:layout_width="64dp" android:layout_height="64dp" android:gravity="center"
+                    android:text="⚡" android:textSize="30sp" android:background="@drawable/card_green"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="14dp" android:orientation="vertical">
+                    <TextView android:id="@+id/exerciseName3" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="چالش AI" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold"/>
+                    <TextView android:id="@+id/exerciseDesc3" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="سرعت، ریتم و کیفیت حرکت" android:textColor="#AEB5C2" android:textSize="12sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5dp"
+                        android:text="AI ANALYSIS  •  امتیاز" android:textColor="#65E2B3" android:textSize="10sp" android:textStyle="bold"/>
+                </LinearLayout>
+                <TextView android:id="@+id/exerciseStart3" android:layout_width="88dp" android:layout_height="42dp" android:gravity="center"
+                    android:text="شروع  ›" android:textColor="#111111" android:textStyle="bold" android:background="@drawable/start_button"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
     <FrameLayout android:id="@+id/cameraUi" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
 
         <LinearLayout android:id="@+id/topPanel" android:layout_width="wrap_content" android:layout_height="wrap_content"
