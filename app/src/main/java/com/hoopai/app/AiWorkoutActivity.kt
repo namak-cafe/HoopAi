@@ -65,7 +65,7 @@ class AiWorkoutActivity : ComponentActivity() {
         root.addView(overlay, FrameLayout.LayoutParams(-1, -1))
         overlay.setOnTouchListener { _, e ->
             if (targetMode && e.action == android.view.MotionEvent.ACTION_UP) {
-                analyzer.setHoopTarget(PointF(e.x, e.y)); targetMode=false
+                analyzer.setHoopTarget(PointF(e.x, e.y), overlay.width, overlay.height); targetMode=false
                 coach.text = "🎯 هدف ثبت شد؛ حالا تمرین را شروع کن."
                 true
             } else false
@@ -322,7 +322,7 @@ class BasketballAnalyzer(
         confidence=max(if(latestPose.isNotEmpty()) .75f else 0f, if(latestBall!=null).72f else 0f)
         listener(LiveStats(attempts,makes,formScore,confidence,lastCoach,event,path.toList(),latestBall,latestHoop,latestPose))
     }
-    fun setHoopTarget(p:PointF){ hoopCenter=p; hoopNorm=PointF(p.x/800f,p.y/450f); latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
+    fun setHoopTarget(p:PointF, viewW:Int, viewH:Int){ hoopCenter=p; hoopNorm=PointF(p.x/viewW.toFloat(),p.y/viewH.toFloat()); latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
     fun manualRep(make:Boolean){ attempts++; if(make)makes++; lastEvent=if(make)"MAKE" else "MISS"; lastEventTime=SystemClock.elapsedRealtime(); emit() }
     fun stats()=LiveStats(attempts,makes,formScore,confidence,lastCoach,null,path.toList(),latestBall,latestHoop,latestPose)
     fun stop(){poseLandmarker?.close();objectDetector?.close()}
