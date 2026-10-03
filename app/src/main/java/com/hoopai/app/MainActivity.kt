@@ -101,7 +101,9 @@ class MainActivity : ComponentActivity() {
     private inner class HoopAiBridge {
         @JavascriptInterface fun startWorkout(category: String, drill: String) {
             runOnUiThread {
-                startActivity(Intent(this@MainActivity, AiWorkoutActivity::class.java).apply {
+                val ready=getSharedPreferences("hoopai_calibration",0).getBoolean("ready",false)
+                val target=if(ready) AiWorkoutActivity::class.java else CalibrationActivity::class.java
+                startActivity(Intent(this@MainActivity, target).apply {
                     putExtra("category", category); putExtra("drill", drill)
                 })
             }
