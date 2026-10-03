@@ -21,6 +21,7 @@ import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarker
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import java.io.ByteArrayOutputStream
+import kotlin.math.abs
 import java.util.concurrent.Executors
 
 class CalibrationActivity:ComponentActivity(){
