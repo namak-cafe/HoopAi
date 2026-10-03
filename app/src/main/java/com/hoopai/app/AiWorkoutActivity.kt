@@ -48,6 +48,7 @@ class AiWorkoutActivity : ComponentActivity() {
     private var manualAttempts = 0
     private var manualMakes = 0
     private var targetMode = false
+    private var useFrontCamera = false
     private val tone=ToneGenerator(AudioManager.STREAM_NOTIFICATION,85)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,8 +110,10 @@ class AiWorkoutActivity : ComponentActivity() {
         }
         val finish = button("پایان") { finishWorkout() }
         val target = button("🎯 هدف") { targetMode=true; coach.text="روی حلقه یا سطل ضربه بزن تا هدف شوت ثبت شود." }
+        val cameraSwitch = button("🔄 دوربین") { useFrontCamera = !useFrontCamera; switchCamera() }
         val make = button("✓ ثبت موفق") { manualRep(true) }
         val miss = button("✕ ثبت ناموفق") { manualRep(false) }
+        controls.addView(cameraSwitch, LinearLayout.LayoutParams(0,58,0.9f))
         controls.addView(target, LinearLayout.LayoutParams(0,58,1f))
         controls.addView(make, LinearLayout.LayoutParams(0,58,1f))
         controls.addView(miss, LinearLayout.LayoutParams(0,58,1f))
@@ -123,6 +126,13 @@ class AiWorkoutActivity : ComponentActivity() {
         setContentView(root)
         startedAt = SystemClock.elapsedRealtime()
         analyzer = BasketballAnalyzer(this, category) { updateFromAi(it) }
+    }
+
+    private fun switchCamera() {
+        if (::analyzer.isInitialized) {
+            coach.text = if (useFrontCamera) "🤳 دوربین سلفی فعال شد." else "📷 دوربین پشت فعال شد."
+        }
+        startCamera()
     }
 
     private fun startCamera() {
@@ -138,7 +148,14 @@ class AiWorkoutActivity : ComponentActivity() {
             analysis.setAnalyzer(cameraExecutor) { proxy -> analyzer.analyze(proxy) }
             try {
                 provider.unbindAll()
-                provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, previewUse, analysis)
+                val selector = if (useFrontCamera) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
+                if (!provider.hasCamera(selector)) {
+                    useFrontCamera = false
+                    coach.text = "این دستگاه دوربین انتخاب‌شده را ندارد؛ دوربین پشت فعال شد."
+                    provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, previewUse, analysis)
+                } else {
+                    provider.bindToLifecycle(this, selector, previewUse, analysis)
+                }
                 status.text = "هوش مصنوعی فعال • بدن + توپ در حال رهگیری"
             } catch (_: Exception) { status.text = "خطا در راه‌اندازی دوربین" }
         }, ContextCompat.getMainExecutor(this))
