@@ -20,9 +20,9 @@ class WorkoutOverlayView(context: Context) : View(context) {
         if(pose.isNotEmpty()){
             paint.style=Paint.Style.STROKE; paint.strokeWidth=5f; paint.color=Color.rgb(35,230,140)
             val edges=arrayOf(11 to 12,11 to 13,13 to 15,12 to 14,14 to 16,11 to 23,12 to 24,23 to 24,23 to 25,25 to 27,24 to 26,26 to 28,27 to 29,29 to 31,28 to 30,30 to 32)
-            for((a,b) in edges) if(a<pose.size&&b<pose.size) c.drawLine(pose[a].x*width,pose[a].y*height,pose[b].x*width,pose[b].y*height,paint)
+            for((a,b) in edges) if(a<pose.size&&b<pose.size) c.drawLine(pose[a].x()*width,pose[a].y()*height,pose[b].x()*width,pose[b].y()*height,paint)
             paint.style=Paint.Style.FILL; paint.color=Color.WHITE
-            pose.forEach{ if(it.visibility().orElse(0f)>.4f)c.drawCircle(it.x*width,it.y*height,5f,paint)}
+            pose.forEach{ if(it.visibility().orElse(0f)>.4f)c.drawCircle(it.x()*width,it.y()*height,5f,paint)}
         }
         if(path.size>1){
             paint.style=Paint.Style.STROKE; paint.strokeWidth=7f; paint.strokeCap=Paint.Cap.ROUND; paint.color=Color.rgb(255,170,55)
