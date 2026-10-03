@@ -6,7 +6,10 @@
         android:label="HoopAI"
         android:allowBackup="false"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="false">
+        android:usesCleartextTraffic="false"
+        android:icon="@drawable/hoopai_logo">
+        <activity android:name=".AiReportActivity" android:exported="false" />
+        <activity android:name=".AiWorkoutActivity" android:exported="false" android:screenOrientation="landscape" android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
