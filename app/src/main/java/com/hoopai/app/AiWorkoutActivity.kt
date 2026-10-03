@@ -45,6 +45,7 @@ class AiWorkoutActivity : ComponentActivity() {
     private var startedAt = 0L
     private var manualAttempts = 0
     private var manualMakes = 0
+    private var targetMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,13 @@ class AiWorkoutActivity : ComponentActivity() {
         overlay = WorkoutOverlayView(this)
         root.addView(preview, FrameLayout.LayoutParams(-1, -1))
         root.addView(overlay, FrameLayout.LayoutParams(-1, -1))
+        overlay.setOnTouchListener { _, e ->
+            if (targetMode && e.action == android.view.MotionEvent.ACTION_UP) {
+                analyzer.setHoopTarget(PointF(e.x, e.y)); targetMode=false
+                coach.text = "🎯 هدف ثبت شد؛ حالا تمرین را شروع کن."
+                true
+            } else false
+        }
 
         val top = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -97,8 +105,10 @@ class AiWorkoutActivity : ComponentActivity() {
             background = rounded(Color.argb(220, 5, 15, 25), 22f)
         }
         val finish = button("پایان") { finishWorkout() }
+        val target = button("🎯 هدف") { targetMode=true; coach.text="روی حلقه یا سطل ضربه بزن تا هدف شوت ثبت شود." }
         val make = button("✓ ثبت موفق") { manualRep(true) }
         val miss = button("✕ ثبت ناموفق") { manualRep(false) }
+        controls.addView(target, LinearLayout.LayoutParams(0,58,1f))
         controls.addView(make, LinearLayout.LayoutParams(0,58,1f))
         controls.addView(miss, LinearLayout.LayoutParams(0,58,1f))
         controls.addView(finish, LinearLayout.LayoutParams(0,58,0.8f))
@@ -282,7 +292,7 @@ class BasketballAnalyzer(
                 if(dy>8f && center.y>risePeakY+12f) shotState=2
             } else if(shotState==2 && dy>8f && center.y>risePeakY+35f) {
                 attempts++
-                val made=hoopCenter?.let{ h -> abs(center.x-h.x)<max(25f,b.width*1.5f) && abs(center.y-h.y)<max(35f,b.height*2.2f) } ?: false
+                val made=hoopCenter?.let{ h -> abs(center.x-h.x)<max(35f,b.width*2f) && abs(center.y-h.y)<max(45f,b.height*2.5f) } ?: false
                 if(made) makes++
                 lastEvent=if(made)"MAKE" else "MISS"; lastEventTime=now
                 shotState=0; path.clear()
@@ -308,6 +318,7 @@ class BasketballAnalyzer(
         confidence=max(if(latestPose.isNotEmpty()) .75f else 0f, if(latestBall!=null).72f else 0f)
         listener(LiveStats(attempts,makes,formScore,confidence,lastCoach,event,path.toList(),latestBall,latestHoop,latestPose))
     }
+    fun setHoopTarget(p:PointF){ hoopCenter=p; latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
     fun manualRep(make:Boolean){ attempts++; if(make)makes++; lastEvent=if(make)"MAKE" else "MISS"; lastEventTime=SystemClock.elapsedRealtime(); emit() }
     fun stats()=LiveStats(attempts,makes,formScore,confidence,lastCoach,null,path.toList(),latestBall,latestHoop,latestPose)
     fun stop(){poseLandmarker?.close();objectDetector?.close()}
