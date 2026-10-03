@@ -26,7 +26,10 @@ jobs:
       - name: Download Pose model
         run: |
           mkdir -p app/src/main/assets
-          if ! curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task"; then\n            echo "Full model unavailable; using verified lite model as fallback"\n            curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task"\n          fi
+          if ! curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task"; then
+            echo "Full model unavailable; using verified lite model as fallback"
+            curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task"
+          fi
       - name: Download Ball model
         run: |
           mkdir -p app/src/main/assets
