@@ -3,6 +3,8 @@ package com.hoopai.app
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.content.Intent
+import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
         webView = WebView(this).apply {
             setBackgroundColor(android.graphics.Color.rgb(7, 17, 28))
             settings.javaScriptEnabled = true
+            addJavascriptInterface(HoopAiBridge(), "HoopAI")
             settings.domStorageEnabled = true
             settings.mediaPlaybackRequiresUserGesture = false
             settings.allowFileAccess = false
@@ -93,6 +96,16 @@ class MainActivity : ComponentActivity() {
                 WebViewAssetLoader.AssetsPathHandler(this)
             )
             .build()
+    }
+
+    private inner class HoopAiBridge {
+        @JavascriptInterface fun startWorkout(category: String, drill: String) {
+            runOnUiThread {
+                startActivity(Intent(this@MainActivity, AiWorkoutActivity::class.java).apply {
+                    putExtra("category", category); putExtra("drill", drill)
+                })
+            }
+        }
     }
 
     override fun onDestroy() {
