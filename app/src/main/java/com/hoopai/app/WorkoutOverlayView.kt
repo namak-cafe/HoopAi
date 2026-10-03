@@ -26,10 +26,10 @@ class WorkoutOverlayView(context: Context) : View(context) {
         }
         if(path.size>1){
             paint.style=Paint.Style.STROKE; paint.strokeWidth=7f; paint.strokeCap=Paint.Cap.ROUND; paint.color=Color.rgb(255,170,55)
-            val p=Path(); path.forEachIndexed{i,q->if(i==0)p.moveTo(q.x(),q.y())else p.lineTo(q.x(),q.y())}; c.drawPath(p,paint)
+            val p=Path(); path.forEachIndexed{i,q->if(i==0)p.moveTo(q.x()*width,q.y()*height)else p.lineTo(q.x()*width,q.y()*height)}; c.drawPath(p,paint)
         }
-        ball?.let{b->paint.style=Paint.Style.STROKE;paint.strokeWidth=4f;paint.color=Color.WHITE;c.drawOval(b,paint)}
-        hoop?.let{h->paint.style=Paint.Style.STROKE;paint.strokeWidth=5f;paint.color=Color.RED;c.drawRect(h,paint)}
+        ball?.let{b->paint.style=Paint.Style.STROKE;paint.strokeWidth=4f;paint.color=Color.WHITE;c.drawOval(RectF(b.left*width,b.top*height,b.right*width,b.bottom*height),paint)}
+        hoop?.let{h->paint.style=Paint.Style.STROKE;paint.strokeWidth=5f;paint.color=Color.RED;c.drawRect(RectF(h.left*width,h.top*height,h.right*width,h.bottom*height),paint)}
         event?.let{e->
             paint.style=Paint.Style.FILL;paint.textAlign=Paint.Align.CENTER;paint.typeface=Typeface.DEFAULT_BOLD;paint.textSize=64f
             paint.color=if(e=="MAKE")Color.rgb(50,235,135) else Color.rgb(255,75,100)
