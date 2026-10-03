@@ -232,14 +232,14 @@ class BasketballAnalyzer(
                 .setBaseOptions(base).setRunningMode(RunningMode.LIVE_STREAM)
                 .setMinPoseDetectionConfidence(.55f).setMinPosePresenceConfidence(.55f)
                 .setMinTrackingConfidence(.55f)
-                .setResultListener { r, _ -> onPose(r) }.setErrorListener { })
+                .setResultListener { r, _ -> onPose(r) }.setErrorListener { }.build())
         } catch (_:Exception) {}
         try {
             val base=BaseOptions.builder().setModelAssetPath("efficientdet_lite0.tflite").build()
             objectDetector=ObjectDetector.createFromOptions(context, ObjectDetector.ObjectDetectorOptions.builder()
                 .setBaseOptions(base).setRunningMode(RunningMode.LIVE_STREAM)
                 .setScoreThreshold(.28f).setMaxResults(8)
-                .setResultListener { r, _ -> onObjects(r) }.setErrorListener { })
+                .setResultListener { r, _ -> onObjects(r) }.setErrorListener { }.build())
         } catch (_:Exception) {}
     }
 
