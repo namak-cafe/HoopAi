@@ -119,7 +119,7 @@ class AiWorkoutActivity : ComponentActivity() {
 
         setContentView(root)
         startedAt = SystemClock.elapsedRealtime()
-        analyzer = BasketballAnalyzer(this) { updateFromAi(it) }
+        analyzer = BasketballAnalyzer(this, category) { updateFromAi(it) }
     }
 
     private fun startCamera() {
@@ -197,6 +197,7 @@ class AiWorkoutActivity : ComponentActivity() {
 
 class BasketballAnalyzer(
     private val context: android.content.Context,
+    private val category: String,
     private val listener: (LiveStats)->Unit
 ) {
     data class LiveStats(
@@ -212,6 +213,8 @@ class BasketballAnalyzer(
     private val path=ArrayDeque<PointF>()
     private var lastBallTime=0L
     private var shotState=0
+    private var bounceState=0
+    private var lastBounceTime=0L
     private var risePeakY=0f
     private var lastEvent: String?=null
     private var lastEventTime=0L
@@ -288,13 +291,20 @@ class BasketballAnalyzer(
         val now=SystemClock.elapsedRealtime()
         val prev=lastBall
         if(prev!=null && now-lastBallTime<900) {
+            if(category.equals("dribbling",true)) {
+                val dy=center.y-prev.y
+                val wristOk=latestPose.size>16 && (dist2(center,PointF(latestPose[15].x(),latestPose[15].y()))<.18f || dist2(center,PointF(latestPose[16].x(),latestPose[16].y()))<.18f)
+                if(wristOk && bounceState==0 && dy>.025f) bounceState=1
+                else if(wristOk && bounceState==1 && dy<-.025f && now-lastBounceTime>280) { attempts++; makes++; lastEvent="MAKE"; lastEventTime=now; lastBounceTime=now; bounceState=0 }
+                lastBall=center; lastBallTime=now; emit(); return
+            }
             val dy=center.y-prev.y
-            if(shotState==0 && dy < -7f) { shotState=1; risePeakY=center.y; path.clear() }
+            if(shotState==0 && dy < -0.018f) { shotState=1; risePeakY=center.y; path.clear() }
             if(shotState==1) {
                 path.addLast(center); while(path.size>40) path.removeFirst()
                 risePeakY=min(risePeakY,center.y)
-                if(dy>8f && center.y>risePeakY+12f) shotState=2
-            } else if(shotState==2 && dy>8f && center.y>risePeakY+35f) {
+                if(dy>0.018f && center.y>risePeakY+0.025f) shotState=2
+            } else if(shotState==2 && dy>0.018f && center.y>risePeakY+0.06f) {
                 attempts++
                 val made=hoopNorm?.let{ h -> abs(center.x-h.x)<0.12f && abs(center.y-h.y)<0.14f } ?: false
                 if(made) makes++
@@ -326,6 +336,7 @@ class BasketballAnalyzer(
     fun manualRep(make:Boolean){ attempts++; if(make)makes++; lastEvent=if(make)"MAKE" else "MISS"; lastEventTime=SystemClock.elapsedRealtime(); emit() }
     fun stats()=LiveStats(attempts,makes,formScore,confidence,lastCoach,null,path.toList(),latestBall,latestHoop,latestPose)
     fun stop(){poseLandmarker?.close();objectDetector?.close()}
+    private fun dist2(a:PointF,b:PointF)=sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y))
     private fun angle(a:NormalizedLandmark,b:NormalizedLandmark,c:NormalizedLandmark):Float{
         val abx=a.x()-b.x(); val aby=a.y()-b.y(); val cbx=c.x()-b.x(); val cby=c.y()-b.y()
         val dot=abx*cbx+aby*cby; val den=max(.0001f,sqrt(abx*abx+aby*aby)*sqrt(cbx*cbx+cby*cby))
