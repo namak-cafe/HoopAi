@@ -26,7 +26,7 @@ jobs:
       - name: Download Pose model
         run: |
           mkdir -p app/src/main/assets
-          curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_lite.task"
+          curl -L --fail -o app/src/main/assets/pose_landmarker_full.task "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task"
       - name: Download Ball model
         run: |
           mkdir -p app/src/main/assets
