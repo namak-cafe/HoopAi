@@ -9,6 +9,8 @@ import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import android.media.ToneGenerator
+import android.media.AudioManager
 import androidx.activity.ComponentActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -46,6 +48,7 @@ class AiWorkoutActivity : ComponentActivity() {
     private var manualAttempts = 0
     private var manualMakes = 0
     private var targetMode = false
+    private val tone=ToneGenerator(AudioManager.STREAM_NOTIFICATION,85)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,8 +151,8 @@ class AiWorkoutActivity : ComponentActivity() {
                     (if (s.attempts > 0) s.makes*100/s.attempts else 0) + "%   •   فرم " + s.formScore
             status.text = if (s.confidence < .45f) "در انتظار تشخیص مطمئن..." else "رهگیری زنده • اعتماد " + (s.confidence*100).toInt() + "%"
             if (s.coach.isNotBlank()) coach.text = "🤖 مربی هوشمند: " + s.coach
-            if (s.event == "MAKE") coach.text = "🟢 شوت موفق — توپ واقعاً وارد ناحیه هدف شد."
-            if (s.event == "MISS") coach.text = "🔴 حرکت/شوت ناموفق — ادامه بده؛ تمرین متوقف نمی‌شود."
+            if (s.event == "MAKE") { coach.text = "🟢 حرکت موفق — تشخیص با اعتماد کافی ثبت شد."; tone.startTone(ToneGenerator.TONE_PROP_ACK,120) }
+            if (s.event == "MISS") { coach.text = "🔴 حرکت ناموفق — ادامه بده؛ تمرین متوقف نمی‌شود."; tone.startTone(ToneGenerator.TONE_PROP_NACK,140) }
         }
     }
 
@@ -179,6 +182,7 @@ class AiWorkoutActivity : ComponentActivity() {
     override fun onDestroy() {
         if (::analyzer.isInitialized) analyzer.stop()
         if (::cameraExecutor.isInitialized) cameraExecutor.shutdown()
+        tone.release()
         super.onDestroy()
     }
 
