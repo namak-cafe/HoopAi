@@ -276,7 +276,7 @@ class BasketballAnalyzer(
             val label=(c.categoryName() ?: "").lowercase()
             val b=d.boundingBox()
             if(label.contains("ball") && c.score()>.35f) ball=RectF(b.left/frameW,b.top/frameH,b.right/frameW,b.bottom/frameH)
-            if((label.contains("basket")||label.contains("hoop")) && c.score()>.35f) hoop=RectF(b.left,b.top,b.right,b.bottom)
+            if((label.contains("basket")||label.contains("hoop")) && c.score()>.35f) hoop=RectF(b.left/frameW,b.top/frameH,b.right/frameW,b.bottom/frameH)
         }
         latestBall=ball; latestHoop=hoop
         if(ball!=null) processBall(ball)
