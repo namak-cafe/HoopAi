@@ -43,6 +43,12 @@ class CalibrationActivity:ComponentActivity(){
   category=intent.getStringExtra("category")?:"finishing"
   drill=intent.getStringExtra("drill")?:"Right Layup"
   buildUi()
+  try{
+   val pb=BaseOptions.builder().setModelAssetPath("pose_landmarker_full.task").build()
+   poseLandmarker=PoseLandmarker.createFromOptions(this,PoseLandmarker.PoseLandmarkerOptions.builder().setBaseOptions(pb).setRunningMode(RunningMode.LIVE_STREAM).setResultListener{r,_->onPose(r)}.setErrorListener{} .build())
+   val db=BaseOptions.builder().setModelAssetPath("efficientdet_lite0.tflite").build()
+   detector=ObjectDetector.createFromOptions(this,ObjectDetector.ObjectDetectorOptions.builder().setBaseOptions(db).setRunningMode(RunningMode.LIVE_STREAM).setScoreThreshold(.25f).setMaxResults(8).setResultListener{r,_->onObjects(r)}.setErrorListener{} .build())
+  }catch(_:Exception){}
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED) startCamera()
   else ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.CAMERA),90)
  }
