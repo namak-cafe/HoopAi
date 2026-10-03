@@ -219,6 +219,9 @@ class BasketballAnalyzer(
     private var latestBall: RectF? = null
     private var latestHoop: RectF? = null
     private var hoopCenter: PointF? = null
+    private var hoopNorm: PointF? = null
+    private var frameW=1f
+    private var frameH=1f
     private var kneeAngle=180f
     private var lastCoach="بدن را کامل داخل کادر نگه دار."
 
@@ -243,6 +246,7 @@ class BasketballAnalyzer(
     fun analyze(proxy: ImageProxy) {
         try {
             val bmp=proxyToBitmap(proxy)
+            frameW=bmp.width.toFloat(); frameH=bmp.height.toFloat()
             val image=BitmapImageBuilder(bmp).build()
             val ts=SystemClock.elapsedRealtime()
             poseLandmarker?.detectAsync(image, ts)
@@ -280,7 +284,7 @@ class BasketballAnalyzer(
     }
 
     private fun processBall(b:RectF) {
-        val center=PointF(b.centerX(),b.centerY())
+        val center=PointF(b.centerX()/frameW,b.centerY()/frameH)
         val now=SystemClock.elapsedRealtime()
         val prev=lastBall
         if(prev!=null && now-lastBallTime<900) {
@@ -292,7 +296,7 @@ class BasketballAnalyzer(
                 if(dy>8f && center.y>risePeakY+12f) shotState=2
             } else if(shotState==2 && dy>8f && center.y>risePeakY+35f) {
                 attempts++
-                val made=hoopCenter?.let{ h -> abs(center.x-h.x)<max(35f,b.width*2f) && abs(center.y-h.y)<max(45f,b.height*2.5f) } ?: false
+                val made=hoopNorm?.let{ h -> abs(center.x-h.x)<0.12f && abs(center.y-h.y)<0.14f } ?: false
                 if(made) makes++
                 lastEvent=if(made)"MAKE" else "MISS"; lastEventTime=now
                 shotState=0; path.clear()
@@ -318,7 +322,7 @@ class BasketballAnalyzer(
         confidence=max(if(latestPose.isNotEmpty()) .75f else 0f, if(latestBall!=null).72f else 0f)
         listener(LiveStats(attempts,makes,formScore,confidence,lastCoach,event,path.toList(),latestBall,latestHoop,latestPose))
     }
-    fun setHoopTarget(p:PointF){ hoopCenter=p; latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
+    fun setHoopTarget(p:PointF){ hoopCenter=p; hoopNorm=PointF(p.x/800f,p.y/450f); latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
     fun manualRep(make:Boolean){ attempts++; if(make)makes++; lastEvent=if(make)"MAKE" else "MISS"; lastEventTime=SystemClock.elapsedRealtime(); emit() }
     fun stats()=LiveStats(attempts,makes,formScore,confidence,lastCoach,null,path.toList(),latestBall,latestHoop,latestPose)
     fun stop(){poseLandmarker?.close();objectDetector?.close()}
