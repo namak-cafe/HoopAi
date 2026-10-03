@@ -275,7 +275,7 @@ class BasketballAnalyzer(
             val c=d.categories().maxByOrNull{it.score()} ?: continue
             val label=(c.categoryName() ?: "").lowercase()
             val b=d.boundingBox()
-            if(label.contains("ball") && c.score()>.35f) ball=RectF(b.left,b.top,b.right,b.bottom)
+            if(label.contains("ball") && c.score()>.35f) ball=RectF(b.left/frameW,b.top/frameH,b.right/frameW,b.bottom/frameH)
             if((label.contains("basket")||label.contains("hoop")) && c.score()>.35f) hoop=RectF(b.left,b.top,b.right,b.bottom)
         }
         latestBall=ball; latestHoop=hoop
@@ -322,7 +322,7 @@ class BasketballAnalyzer(
         confidence=max(if(latestPose.isNotEmpty()) .75f else 0f, if(latestBall!=null).72f else 0f)
         listener(LiveStats(attempts,makes,formScore,confidence,lastCoach,event,path.toList(),latestBall,latestHoop,latestPose))
     }
-    fun setHoopTarget(p:PointF, viewW:Int, viewH:Int){ hoopCenter=p; hoopNorm=PointF(p.x/viewW.toFloat(),p.y/viewH.toFloat()); latestHoop=RectF(p.x-45f,p.y-20f,p.x+45f,p.y+20f); emit() }
+    fun setHoopTarget(p:PointF, viewW:Int, viewH:Int){ hoopCenter=p; hoopNorm=PointF(p.x/viewW.toFloat(),p.y/viewH.toFloat()); latestHoop=RectF(hoopNorm!!.x-.04f,hoopNorm!!.y-.03f,hoopNorm!!.x+.04f,hoopNorm!!.y+.03f); emit() }
     fun manualRep(make:Boolean){ attempts++; if(make)makes++; lastEvent=if(make)"MAKE" else "MISS"; lastEventTime=SystemClock.elapsedRealtime(); emit() }
     fun stats()=LiveStats(attempts,makes,formScore,confidence,lastCoach,null,path.toList(),latestBall,latestHoop,latestPose)
     fun stop(){poseLandmarker?.close();objectDetector?.close()}
